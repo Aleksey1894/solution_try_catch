@@ -164,7 +164,11 @@ namespace Lesson_9_Text_And_Files
                     contacts[i].phone = array[1];
                     contacts[i].date = DateTime.Parse(array[2]);
                 }
-                catch(FormatException e)
+                catch (DirectoryNotFoundException)
+                {                   
+                    Console.WriteLine($"Line number {i + 1}: Directory not found");
+                }
+                catch (FileNotFoundException e)
                 {
                     Console.WriteLine($"Line number {i + 1}: is not parsing {e.Message}");
                 }
@@ -195,11 +199,34 @@ namespace Lesson_9_Text_And_Files
 
         static string[] ReadDatabaseAllTextLines(string file)
         {
+        //    if (!File.Exists(file))
+         //   {
+         //       File.WriteAllText(file, "");
+         //   }
+         //   return File.ReadAllLines(file);
+        try
+        {
             if (!File.Exists(file))
             {
                 File.WriteAllText(file, "");
             }
-            return File.ReadAllLines(file);
+                return File.ReadAllLines(file);
+            }
+        catch(FileNotFoundException)
+            {
+                Console.WriteLine("File not found");
+                return new string[0];
+            }
+        catch(DirectoryNotFoundException)
+            {
+                Console.WriteLine("Directory not found");
+                return new string[0];
+            }
+        catch(Exception e) 
+            {
+                Console.WriteLine($"Error: {e.Message}");
+                return new string[0];
+            }
         }
     }
 }
